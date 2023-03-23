@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "stream-riva-client"
+version = "0.1.0"
+description = ""
+authors = ["fukuoka <to.fukuoka@gmail.com>"]
+readme = "README.md"
+packages = [{include = "stream_riva_client"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+openai = "^0.27.2"
+nvidia-riva-client = "^2.10.0"
+pyaudio = "^0.2.13"
+dotenv-python = "^0.0.1"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

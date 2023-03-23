@@ -7,20 +7,21 @@ from riva.client.argparse_utils import (
     add_connection_argparse_parameters,
 )
 
+# マイク入力のフォーマット
 AUDIO_FORMAT = pyaudio.paInt16
 AUDIO_CHANNELS = 1
 AUDIO_RATE = 44100
 AUDIO_CHUNK_SIZE = 1024
 
 
-def stream_asr(config, chunk_size, audio_stream):
+def stream_asr(config, audio_stream, output=None):
     auth = riva.client.Auth(uri="localhost:50051")
     asr_service = riva.client.ASRService(auth)
     riva.client.print_streaming(
         responses=asr_service.streaming_response_generator(
-            audio_chunks=audio_stream,
-            streaming_config=config,
+            audio_chunks=audio_stream, streaming_config=config
         ),
+        output_file=output,
         additional_info="time",
     )
 
@@ -52,11 +53,10 @@ def audio_stream(file_streaming_chunk):
     audio.terminate()
 
 
-if __name__ == "__main__":
+def asr_config():
     parser = argparse.ArgumentParser()
 
     parser = add_connection_argparse_parameters(parser)
-    parser.add_argument("--output-file")
     parser.add_argument("--file-streaming-chunk", type=int, default=AUDIO_CHUNK_SIZE)
     parser = add_asr_config_argparse_parameters(
         parser, max_alternatives=True, profanity_filter=True, word_time_offsets=True
@@ -83,6 +83,10 @@ if __name__ == "__main__":
         config, args.boosted_lm_words, args.boosted_lm_score
     )
 
-    stream_asr(
-        config, args.file_streaming_chunk, audio_stream(args.file_streaming_chunk)
-    )
+    return args, config
+
+
+if __name__ == "__main__":
+    args, config = asr_config()
+
+    stream_asr(config, audio_stream(args.file_streaming_chunk))
