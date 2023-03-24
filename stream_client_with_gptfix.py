@@ -1,11 +1,10 @@
 import io
-import os
 from dataclasses import dataclass, asdict
 from dotenv import DotEnv
 
 import openai
 import riva.client
-from stream_client import audio_stream, asr_config
+from asr_stream_client import audio_stream, asr_config
 
 
 SYSTEM_PROMPT_1 = """

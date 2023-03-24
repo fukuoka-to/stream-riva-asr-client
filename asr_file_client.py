@@ -7,12 +7,10 @@ from riva.client.argparse_utils import (
 )
 
 
-def send_file(
+def asr_file(
     config,
     input_file,
-    output_file,
-    file_streaming_chunk,
-    word_time_offsets,
+    file_streaming_chunk
 ):
     auth = riva.client.Auth(uri="localhost:50051")
     asr_service = riva.client.ASRService(auth)
@@ -27,9 +25,7 @@ def send_file(
                 audio_chunks=audio_chunk_iterator,
                 streaming_config=config,
             ),
-            # output_file=None,
             additional_info="time",
-            # word_time_offsets=word_time_offsets,
         )
 
 
@@ -38,7 +34,6 @@ if __name__ == "__main__":
 
     parser = add_connection_argparse_parameters(parser)
     parser.add_argument("--input-file", required=True)
-    parser.add_argument("--output-file")
     parser.add_argument("--file-streaming-chunk", type=int, default=1600)
     parser = add_asr_config_argparse_parameters(
         parser, max_alternatives=True, profanity_filter=True, word_time_offsets=True
@@ -65,10 +60,9 @@ if __name__ == "__main__":
         config, args.boosted_lm_words, args.boosted_lm_score
     )
 
-    send_file(
+    asr_file(
         config,
         args.input_file,
-        args.output_file,
         args.file_streaming_chunk,
         args.word_time_offsets,
     )

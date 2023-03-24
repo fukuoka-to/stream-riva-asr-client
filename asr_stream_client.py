@@ -1,5 +1,6 @@
 import argparse
 import pyaudio
+from typing import Generator, TextIO
 
 import riva.client
 from riva.client.argparse_utils import (
@@ -14,7 +15,11 @@ AUDIO_RATE = 44100
 AUDIO_CHUNK_SIZE = 1024
 
 
-def stream_asr(config, audio_stream, output=None):
+def stream_asr(
+    config: riva.client.StreamingRecognitionConfig,
+    audio_stream: Generator[bytes, None, None],
+    output: TextIO = None,
+):
     auth = riva.client.Auth(uri="localhost:50051")
     asr_service = riva.client.ASRService(auth)
     riva.client.print_streaming(
@@ -26,7 +31,7 @@ def stream_asr(config, audio_stream, output=None):
     )
 
 
-def audio_stream(file_streaming_chunk):
+def audio_stream(file_streaming_chunk: int) -> Generator[bytes, None, None]:
     audio = pyaudio.PyAudio()
 
     stream = audio.open(
@@ -88,5 +93,4 @@ def asr_config():
 
 if __name__ == "__main__":
     args, config = asr_config()
-
     stream_asr(config, audio_stream(args.file_streaming_chunk))
