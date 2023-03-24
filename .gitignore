@@ -1,3 +1,5 @@
-riva_streaming_asr_client.py
 .env
+__pycache__
+*.pyc
 *.wav
+riva_streaming_asr_client.py
