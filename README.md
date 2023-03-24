@@ -1,13 +1,22 @@
-# NVIDIA Riva Speech APIによる音声認識のテスト
+# NVIDIA Riva ASRによる音声認識
+
+## 事前準備
+
+NVIDIA Riva ASRのサーバーがローカルで起動している必要があります。
+
+```shell
+bash riva_start.sh
+```
+
 
 ## ファイルを入力とする
 
-```
-python ./file_client.py --input-file output.wav
+```shell
+python ./asr_file_client.py --input-file sample.wav
 ```
 
-## マイク入力をストリーミングで認識する
+## マイク入力をストリーミングで音声認識する
 
-```
-python ./stream_client.py --language-code ja-JP
+```shell
+python ./asr_stream_client.py
 ```
